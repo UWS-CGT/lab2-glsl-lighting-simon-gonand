@@ -194,32 +194,32 @@ GLuint loadBitmap(char *fname) {
 
 void init(void) {
 	
-	shaderProgram = rt3d::initShaders("phong-tex.vert","phong-tex.frag");
+	shaderProgram = rt3d::initShaders("../lab2-glsl-lighting-simon-gonand/phong-tex.vert","../lab2-glsl-lighting-simon-gonand/phong-tex.frag");
 	rt3d::setLight(shaderProgram, light0);
 	rt3d::setMaterial(shaderProgram, material0);
 
-	skyboxProgram = rt3d::initShaders("textured.vert","textured.frag");
+	skyboxProgram = rt3d::initShaders("../lab2-glsl-lighting-simon-gonand/textured.vert","../lab2-glsl-lighting-simon-gonand/textured.frag");
 
 	vector<GLfloat> verts;
 	vector<GLfloat> norms;
 	vector<GLfloat> tex_coords;
 	vector<GLuint> indices;
-	rt3d::loadObj("../../../../Resources/cube.obj", verts, norms, tex_coords, indices);
+	rt3d::loadObj("../resources/cube.obj", verts, norms, tex_coords, indices);
 	GLuint size = indices.size();
 	meshIndexCount = size;
-	textures[0] = loadBitmap("../../../../Resources/fabric.bmp");
+	textures[0] = loadBitmap("../resources/fabric.bmp");
 	meshObjects[0] = rt3d::createMesh(verts.size()/3, verts.data(), nullptr, norms.data(), tex_coords.data(), size, indices.data());
 
-	textures[1] = loadBitmap("../../../../Resources/hobgoblin2.bmp");
-	meshObjects[1] = tmpModel.ReadMD2Model("../../../../Resources/tris.MD2");
+	textures[1] = loadBitmap("../resources/hobgoblin2.bmp");
+	meshObjects[1] = tmpModel.ReadMD2Model("../resources/tris.MD2");
 	md2VertCount = tmpModel.getVertDataCount();
 
 	
 	
-	skybox[0] = loadBitmap("../../../../Resources/Town-skybox/Town_ft.bmp");
-	skybox[1] = loadBitmap("../../../../Resources/Town-skybox/Town_bk.bmp");
-	skybox[2] = loadBitmap("../../../../Resources/Town-skybox/Town_lf.bmp");
-	skybox[3] = loadBitmap("../../../../Resources/Town-skybox/Town_rt.bmp");
+	skybox[0] = loadBitmap("../resources/Town-skybox/Town_ft.bmp");
+	skybox[1] = loadBitmap("../resources/Town-skybox/Town_bk.bmp");
+	skybox[2] = loadBitmap("../resources/Town-skybox/Town_lf.bmp");
+	skybox[3] = loadBitmap("../resources/Town-skybox/Town_rt.bmp");
 	//skybox[4] = loadBitmap("Town-skybox/Town_up.bmp");
 
 	glEnable(GL_DEPTH_TEST);
@@ -231,7 +231,7 @@ void init(void) {
 	if (TTF_Init()== -1)
 		cout << "TTF failed to initialise." << endl;
 
-	textFont = TTF_OpenFont("../../../../Resources/MavenPro-Regular.ttf", 48);
+	textFont = TTF_OpenFont("../resources/MavenPro-Regular.ttf", 48);
 	if (textFont == NULL)
 		cout << "Failed to open font." << endl;
 		
