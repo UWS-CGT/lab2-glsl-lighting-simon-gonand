@@ -46,7 +46,7 @@ GLuint skybox[5];
 GLuint labels[5];
 
 rt3d::lightStruct light0 = {
-	{0.5f, 0.5f, 0.5f, 1.0f}, // ambient
+	{0.3f, 0.3f, 0.3f, 1.0f}, // ambient
 	{1.0f, 1.0f, 1.0f, 1.0f}, // diffuse
 	{1.0f, 1.0f, 1.0f, 1.0f}, // specular
 	{-10.0f, 10.0f, 10.0f, 1.0f}  // position
@@ -64,6 +64,20 @@ rt3d::materialStruct material1 = {
 	{0.8f, 0.8f, 1.0f, 1.0f}, // diffuse
 	{0.8f, 0.8f, 0.8f, 1.0f}, // specular
 	1.0f  // shininess
+};
+
+rt3d::materialStruct materialCube1 = {
+	{(1.0 / 255.0) * 10.0f, (1.0 / 255.0) * 46.0f, (1.0 / 255.0) * 160.0f, 1.0f}, // ambient
+	{(1.0/255.0)*16.0f, (1.0 / 255.0) * 52.0f, (1.0 / 255.0) * 166.0f, 1.0f}, // diffuse
+	{0.1f, 0.1f, 0.0f, 1.0f}, // specular
+	2.0f  // shininess
+};
+
+rt3d::materialStruct materialCube3 = {
+	{1.0f, 1.0f, 1.0f, 1.0f}, // ambient
+	{1.0f, 1.0f, 1.0f, 1.0f}, // diffuse
+	{0.0f, 0.0f, 0.0f, 1.0f}, // specular
+	1.0f // shininess
 };
 
 // md2 stuff
@@ -214,7 +228,7 @@ void init(void) {
 	meshObjects[1] = tmpModel.ReadMD2Model("../resources/tris.MD2");
 	md2VertCount = tmpModel.getVertDataCount();
 
-	//textures[2] = loadBitmap("../resources/Red_Bricks.bmp");
+	textures[2] = loadBitmap("../resources/Red_Bricks.bmp");
 	
 	
 	skybox[0] = loadBitmap("../resources/Town-skybox/Town_ft.bmp");
@@ -367,13 +381,31 @@ void draw(SDL_Window * window) {
 
 	rt3d::setUniformMatrix4fv(shaderProgram, "projection", glm::value_ptr(projection));
 
-	// draw a simple cube next to the hobgoblin
+	// draw simple cubes next to the hobgoblin
 	glBindTexture(GL_TEXTURE_2D, textures[0]);
 	mvStack.push(mvStack.top());
 	mvStack.top() = glm::translate(mvStack.top(), glm::vec3(3.0f, 1.2f, -5.0f));
 	mvStack.top() = glm::scale(mvStack.top(), glm::vec3(0.5f, 0.5f, 0.5f));
 	rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(mvStack.top()));
+	rt3d::setMaterial(shaderProgram, materialCube1);
+	rt3d::drawIndexedMesh(meshObjects[0], meshIndexCount, GL_TRIANGLES);
+	mvStack.pop();
+	
+	glBindTexture(GL_TEXTURE_2D, textures[0]);
+	mvStack.push(mvStack.top());
+	mvStack.top() = glm::translate(mvStack.top(), glm::vec3(5.0f, 1.2f, -5.0f));
+	mvStack.top() = glm::scale(mvStack.top(), glm::vec3(0.5f, 0.5f, 0.5f));
+	rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(mvStack.top()));
 	rt3d::setMaterial(shaderProgram, material0);
+	rt3d::drawIndexedMesh(meshObjects[0], meshIndexCount, GL_TRIANGLES);
+	mvStack.pop();
+	
+	glBindTexture(GL_TEXTURE_2D, textures[2]);
+	mvStack.push(mvStack.top());
+	mvStack.top() = glm::translate(mvStack.top(), glm::vec3(7.0f, 1.2f, -5.0f));
+	mvStack.top() = glm::scale(mvStack.top(), glm::vec3(0.5f, 0.5f, 0.5f));
+	rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(mvStack.top()));
+	rt3d::setMaterial(shaderProgram, materialCube3);
 	rt3d::drawIndexedMesh(meshObjects[0], meshIndexCount, GL_TRIANGLES);
 	mvStack.pop();
 
