@@ -51,7 +51,9 @@ rt3d::lightStruct light0 = {
 	{1.0f, 1.0f, 1.0f, 1.0f}, // specular
 	{-10.0f, 10.0f, 10.0f, 1.0f}  // position
 };
-glm::vec4 lightPos(-10.0f, 10.0f, 10.0f, 1.0f); //light position
+glm::vec4 lightFixedPos(-10.0f, 10.0f, 10.0f, 1.0f); //light position
+glm::vec4 lightPos = lightFixedPos;
+bool lightIsFixed(true);
 
 rt3d::materialStruct material0 = {
 	{0.2f, 0.4f, 0.2f, 1.0f}, // ambient
@@ -264,12 +266,18 @@ glm::vec3 moveRight(glm::vec3 pos, GLfloat angle, GLfloat d) {
 
 void update(void) {
 	const Uint8 *keys = SDL_GetKeyboardState(NULL);
+	if ( keys[SDL_SCANCODE_Q] ) lightIsFixed = true;
+	if ( keys[SDL_SCANCODE_E] ) lightIsFixed = false;
+
 	if ( keys[SDL_SCANCODE_W] ) eye = moveForward(eye,r,0.1f);
 	if ( keys[SDL_SCANCODE_S] ) eye = moveForward(eye,r,-0.1f);
 	if ( keys[SDL_SCANCODE_A] ) eye = moveRight(eye,r,-0.1f);
 	if ( keys[SDL_SCANCODE_D] ) eye = moveRight(eye,r,0.1f);
 	if ( keys[SDL_SCANCODE_R] ) eye.y += 0.1;
 	if ( keys[SDL_SCANCODE_F] ) eye.y -= 0.1;
+	
+	if (lightIsFixed) lightPos = lightFixedPos;
+	else lightPos = glm::vec4(eye, 1.0f);
 
 	if ( keys[SDL_SCANCODE_COMMA] ) r -= 1.0f;
 	if ( keys[SDL_SCANCODE_PERIOD] ) r += 1.0f;
