@@ -266,8 +266,16 @@ glm::vec3 moveRight(glm::vec3 pos, GLfloat angle, GLfloat d) {
 
 void update(void) {
 	const Uint8 *keys = SDL_GetKeyboardState(NULL);
-	if ( keys[SDL_SCANCODE_Q] ) lightIsFixed = true;
-	if ( keys[SDL_SCANCODE_E] ) lightIsFixed = false;
+	if (keys[SDL_SCANCODE_Q]) {
+		lightIsFixed = true;
+		lightPos = lightFixedPos;
+		cout << "The light is fixed" << endl;
+		cout << "but you can move it with the arrows keys" << endl;
+	}
+	if (keys[SDL_SCANCODE_E]) {
+		lightIsFixed = false;
+		cout << "The light is moving with the camera" << endl;
+	}
 
 	if ( keys[SDL_SCANCODE_W] ) eye = moveForward(eye,r,0.1f);
 	if ( keys[SDL_SCANCODE_S] ) eye = moveForward(eye,r,-0.1f);
@@ -276,7 +284,17 @@ void update(void) {
 	if ( keys[SDL_SCANCODE_R] ) eye.y += 0.1;
 	if ( keys[SDL_SCANCODE_F] ) eye.y -= 0.1;
 	
-	if (lightIsFixed) lightPos = lightFixedPos;
+	if (lightIsFixed) {
+		if (keys[SDL_SCANCODE_UP]) lightPos = glm::vec4(moveForward(lightPos, 0.0f, 0.1f), 1.0f);
+		if (keys[SDL_SCANCODE_DOWN]) lightPos = glm::vec4(moveForward(lightPos, 0.0f, -0.1f), 1.0f);
+		if (keys[SDL_SCANCODE_LEFT]) lightPos = glm::vec4(moveRight(lightPos, 0.0f, -0.1f), 1.0f);
+		if (keys[SDL_SCANCODE_RIGHT]) lightPos = glm::vec4(moveRight(lightPos, 0.0f, 0.1f), 1.0f);
+		if (keys[SDL_SCANCODE_PAGEUP]) {
+			lightPos.y += 0.1;
+			cout << lightPos.x << " " << lightPos.y << " " << lightPos.z << endl;
+		}
+		if (keys[SDL_SCANCODE_PAGEDOWN]) lightPos.y -= 0.1;
+	}
 	else lightPos = glm::vec4(eye, 1.0f);
 
 	if ( keys[SDL_SCANCODE_COMMA] ) r -= 1.0f;
