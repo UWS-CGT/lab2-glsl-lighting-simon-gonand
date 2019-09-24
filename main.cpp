@@ -441,6 +441,16 @@ void draw(SDL_Window * window) {
 	rt3d::drawIndexedMesh(meshObjects[0], meshIndexCount, GL_TRIANGLES);
 	mvStack.pop();
 
+	// draw a cube for the following the light
+	glBindTexture(GL_TEXTURE_2D, textures[0]);
+	mvStack.push(mvStack.top());
+	mvStack.top() = glm::translate(mvStack.top(), glm::vec3(lightPos.x, 0, lightPos.z));
+	mvStack.top() = glm::scale(mvStack.top(), glm::vec3(0.2f, 0.2f, 0.2f));
+	rt3d::setUniformMatrix4fv(shaderProgram, "modelview", glm::value_ptr(mvStack.top()));
+	rt3d::setMaterial(shaderProgram, materialCube1);
+	rt3d::drawIndexedMesh(meshObjects[0], meshIndexCount, GL_TRIANGLES);
+	mvStack.pop();
+
 	// draw a cube for ground plane
 	glBindTexture(GL_TEXTURE_2D, textures[0]);
 	mvStack.push(mvStack.top());
