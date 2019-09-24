@@ -409,7 +409,7 @@ void draw(SDL_Window * window) {
 	glUniform1f(uniformIndexL, 0.02);
 	
 	int uniformIndexQ = glGetUniformLocation(shaderProgram, "attQuadratic");
-	glUniform1f(uniformIndexQ, 0.01);
+	glUniform1f(uniformIndexQ, 0.003);
 
 	rt3d::setUniformMatrix4fv(shaderProgram, "projection", glm::value_ptr(projection));
 
