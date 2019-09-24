@@ -23,6 +23,11 @@ uniform lightStruct light;
 uniform materialStruct material;
 uniform sampler2D textureUnit0;
 
+in float ex_D;
+uniform float attConst;
+uniform float attLinear;
+uniform float attQuadratic;
+
 in vec3 ex_N;
 in vec3 ex_V;
 in vec3 ex_L;
@@ -45,7 +50,10 @@ void main(void) {
 	vec4 specularI = light.specular * material.specular;
 	specularI = specularI * pow(max(dot(R,ex_V),0), material.shininess);
 
+	// Attenuation
+	float attenuation = (1/(attConst + attLinear*ex_D + attQuadratic*ex_D*ex_D));
+
 	// Fragment colour
-	out_Color = (ambientI + diffuseI + specularI) * texture(textureUnit0, ex_TexCoord);
+	out_Color = (ambientI + vec4((diffuseI.rgb + specularI.rgb)/attenuation, 1.0)) * texture(textureUnit0, ex_TexCoord);
 	//out_Color = texture2D(textureUnit0, ex_TexCoord);
 }

@@ -289,10 +289,7 @@ void update(void) {
 		if (keys[SDL_SCANCODE_DOWN]) lightPos = glm::vec4(moveForward(lightPos, 0.0f, -0.1f), 1.0f);
 		if (keys[SDL_SCANCODE_LEFT]) lightPos = glm::vec4(moveRight(lightPos, 0.0f, -0.1f), 1.0f);
 		if (keys[SDL_SCANCODE_RIGHT]) lightPos = glm::vec4(moveRight(lightPos, 0.0f, 0.1f), 1.0f);
-		if (keys[SDL_SCANCODE_PAGEUP]) {
-			lightPos.y += 0.1;
-			cout << lightPos.x << " " << lightPos.y << " " << lightPos.z << endl;
-		}
+		if (keys[SDL_SCANCODE_PAGEUP]) lightPos.y += 0.1;
 		if (keys[SDL_SCANCODE_PAGEDOWN]) lightPos.y -= 0.1;
 	}
 	else lightPos = glm::vec4(eye, 1.0f);
@@ -404,6 +401,15 @@ void draw(SDL_Window * window) {
 	light0.position[2] = tmp.z;
 	rt3d::setLightPos(shaderProgram, glm::value_ptr(tmp));
 
+	// set light attenuation shader uniforms
+	int uniformIndexC = glGetUniformLocation(shaderProgram, "attConst");
+	glUniform1f(uniformIndexC, 1);
+
+	int uniformIndexL = glGetUniformLocation(shaderProgram, "attLinear");
+	glUniform1f(uniformIndexL, 0.02);
+	
+	int uniformIndexQ = glGetUniformLocation(shaderProgram, "attQuadratic");
+	glUniform1f(uniformIndexQ, 0.01);
 
 	rt3d::setUniformMatrix4fv(shaderProgram, "projection", glm::value_ptr(projection));
 
